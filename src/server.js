@@ -8,22 +8,22 @@ require("dotenv").config();
 
 
 // Innit
-const app = express();
+const server = express();
 
 
 // middlewares
-app.use(express.json());
-app.use(express.text());
-app.use(express.static(__dirname + "/public"));
-app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+server.use(express.json());
+server.use(express.text());
+server.use(express.static(__dirname + "/public"));
+server.use(express.urlencoded({ extended: true }));
+server.use(morgan('dev'));
 
 // routes
-app.use('/api/registros', routerRegistros);
+server.use('/api/registros', routerRegistros);
 
 
 // Servidor - Base de datos
-app.listen(process.env.PORT, async () => {
+server.listen(process.env.PORT, async () => {
   console.log(`Server running on PORT ${process.env.PORT}`);
 
   try {
