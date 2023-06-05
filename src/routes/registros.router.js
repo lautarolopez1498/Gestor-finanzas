@@ -3,7 +3,7 @@ const registroModel = require("../models/Registros.js");
 
 const router = Router();
 
-router.post('/api/nuevo-registro', async (req, res) => {
+router.post('/nuevo-registro', async (req, res) => {
   try {
     const nuevoRegistro = await registroModel.create({
       month: req.body.month,
@@ -14,18 +14,18 @@ router.post('/api/nuevo-registro', async (req, res) => {
     });
 
     return res.json({
-      message: "Ok",
+      message: 'Ok, registro ingresado correctamente',
       payload: nuevoRegistro,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "error",
-      payload: "Error al crear registro",
+      message: `Error: ${error}`,
+      payload: 'Error al crear registro'
     });
   }
 });
 
-router.get('/api/registros', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const registros = await registroModel.find();
     res.json({
@@ -34,13 +34,13 @@ router.get('/api/registros', async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      message: 'Error',
+      message: `Error: ${error}`,
       payload: 'Error al mostrar registros'
     })
   }
 });
 
-router.get('/api/registros/generales', async (req, res) => {
+router.get('/generales', async (req, res) => {
   try {  
     const generales = await registroModel.find({ category: "Generales" });
     res.json({
@@ -50,13 +50,13 @@ router.get('/api/registros/generales', async (req, res) => {
 
   } catch(error) {
       return res.status(500).json({
-        message: 'Error',
+        message: `Error: ${error}`,
         payload: 'Error al mostrar los "Gastos Generales'
       })
   }
 });
 
-router.get('/api/registros/personales', async (req, res) => {
+router.get('/personales', async (req, res) => {
   try {  
     const personales = await registroModel.find({ category: "Personales" });
     res.json({
@@ -66,13 +66,13 @@ router.get('/api/registros/personales', async (req, res) => {
 
   } catch(error) {
       return res.status(500).json({
-        message: 'Error',
+        message: `Error: ${error}`,
         payload: 'Error al mostrar los "Gastos Personales'
       })
   }
 });
 
-router.get('/api/registros/ahorros', async (req, res) => {
+router.get('/ahorros', async (req, res) => {
   try {  
     const ahorros = await registroModel.find({ category: "Ahorros" });
     res.json({
@@ -82,10 +82,26 @@ router.get('/api/registros/ahorros', async (req, res) => {
 
   } catch(error) {
       return res.status(500).json({
-        message: 'Error',
+        message: `Error: ${error}`,
         payload: 'Error al mostrar los "Ahorros'
       })
   }
 });
+
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    const registoID = req.params.id
+    const registroEliminado = await registroModel.findByIdAndRemove(registoID)
+    res.json({
+      message: 'Ok, registro eliminado',
+      payload: registroEliminado
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error: ${error}`,
+      payload: 'Error al intentar borrar un registro'
+    })
+  }
+})
 
 module.exports = router;

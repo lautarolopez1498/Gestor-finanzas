@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // routes
-app.use('/', routerRegistros);
+app.use('/api/registros', routerRegistros);
 
 
 // Servidor - Base de datos
