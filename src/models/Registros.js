@@ -1,16 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const coleccionRegistros = 'registros';
+const coleccionRegistros = "registros";
 
 const registrosSchema = new mongoose.Schema({
-  month: String,
-  year: Number,
-  description: String,
+  date: Date,
+  title: String,
+  category: { type: String, enum: ["Generales", "Personales", "Ahorros"] },
   amount: Number,
-  category: { type: String, enum: ['Generales', 'Personales', 'Ahorros']}
 });
 
 const registroModel = mongoose.model(coleccionRegistros, registrosSchema);
 
 module.exports = registroModel;
-
