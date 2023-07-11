@@ -8,6 +8,7 @@ class App extends React.Component {
       date: "",
       category: "",
       amount: "",
+      expenses: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.addExpense = this.addExpense.bind(this);
@@ -18,13 +19,53 @@ class App extends React.Component {
       method: "POST",
       body: JSON.stringify(this.state),
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
     })
-      .then((res) => console.log(res))
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        M.toast({ html: "Se ha ingresado un nuevo registro" });
+        this.setState({
+          title: "",
+          date: "",
+          category: "",
+          amount: "",
+        });
+        this.getExpenses();
+      })
       .catch((err) => console.log(err));
     e.preventDefault();
+  }
+
+  componentDidMount() {
+    this.getExpenses();
+  }
+
+  getExpenses() {
+    fetch("/api/registros")
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ expenses: data.payload });
+        console.log(this.state.expenses);
+      });
+  }
+
+  deleteExpense(id) {
+    if (confirm("Desea eliminar este registro?")) {
+      fetch(`api/registros/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          M.toast({ html: "El registro ha sido eliminado" });
+          this.getExpenses();
+        });
+    }
   }
 
   handleChange(e) {
@@ -58,6 +99,7 @@ class App extends React.Component {
                           onChange={this.handleChange}
                           type="text"
                           placeholder="Nombre del gasto"
+                          value={this.state.title}
                         ></input>
                       </div>
                       <div className="input-field col s12">
@@ -65,6 +107,7 @@ class App extends React.Component {
                           name="date"
                           onChange={this.handleChange}
                           type="date"
+                          value={this.state.date}
                         ></input>
                       </div>
                       <div className="input-field col s12">
@@ -73,6 +116,7 @@ class App extends React.Component {
                           onChange={this.handleChange}
                           type="text"
                           placeholder="Categoria"
+                          value={this.state.category}
                         ></input>
                       </div>
                       <div className="input-field col s12">
@@ -81,6 +125,7 @@ class App extends React.Component {
                           onChange={this.handleChange}
                           type="number"
                           placeholder="Importe"
+                          value={this.state.amount}
                         ></input>
                       </div>
                     </div>
@@ -91,7 +136,45 @@ class App extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="col s7"></div>
+            <div className="col s7">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Gasto</th>
+                    <th>Fecha</th>
+                    <th>Categoria</th>
+                    <th>Importe</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.expenses.map((expense) => {
+                    return (
+                      <tr key={expense._id}>
+                        <td>{expense.title}</td>
+                        <td>{expense.date}</td>
+                        <td>{expense.category}</td>
+                        <td>{expense.amount}</td>
+                        <td>
+                          <button
+                            className="btn cyan darken-4"
+                            onClick={this.editExpense}
+                          >
+                            <i className="material-icons">edit</i>
+                          </button>
+                          <button
+                            className="btn red darken-1"
+                            style={{ margin: "4px" }}
+                            onClick={() => this.deleteExpense(expense._id)}
+                          >
+                            <i className="material-icons">delete</i>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

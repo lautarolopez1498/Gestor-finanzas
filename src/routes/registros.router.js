@@ -84,7 +84,7 @@ router.get("/ahorros", async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const registoID = req.params.id;
     const registroEliminado = await registroModel.findByIdAndRemove(registoID);
@@ -96,6 +96,27 @@ router.delete("/delete/:id", async (req, res) => {
     return res.status(500).json({
       message: `Error: ${error}`,
       payload: "Error al intentar borrar un registro",
+    });
+  }
+});
+
+router.patch("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const registroActualizado = await registroModel.findByIdAndUpdate(id, {
+      date: req.body.date,
+      title: req.body.title,
+      category: req.body.category,
+      amount: req.body.amount,
+    });
+    res.json({
+      message: "Ok, registro actualizado",
+      payload: registroActualizado,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error: ${error}`,
+      payload: "Error al intentar actualizar un registro",
     });
   }
 });
