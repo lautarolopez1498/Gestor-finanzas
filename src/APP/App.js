@@ -9,32 +9,57 @@ class App extends React.Component {
       category: "",
       amount: "",
       expenses: [],
+      _id: "",
     };
     this.handleChange = this.handleChange.bind(this);
     this.addExpense = this.addExpense.bind(this);
   }
 
   addExpense(e) {
-    fetch("api/registros", {
-      method: "POST",
-      body: JSON.stringify(this.state),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        M.toast({ html: "Se ha ingresado un nuevo registro" });
-        this.setState({
-          title: "",
-          date: "",
-          category: "",
-          amount: "",
-        });
-        this.getExpenses();
+    if (this.state._id) {
+      fetch(`/api/registros/${this.state._id}`, {
+        method: "PATCH",
+        body: JSON.stringify(this.state),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      .catch((err) => console.log(err));
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          M.toast({ html: "El registro ha sido actualizado" });
+          this.setState({
+            title: "",
+            date: "",
+            category: "",
+            amount: "",
+            expenses: [],
+            _id: "",
+          });
+          this.getExpenses();
+        });
+    } else {
+      fetch("api/registros", {
+        method: "POST",
+        body: JSON.stringify(this.state),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          M.toast({ html: "Se ha ingresado un nuevo registro" });
+          this.setState({
+            title: "",
+            date: "",
+            category: "",
+            amount: "",
+          });
+          this.getExpenses();
+        })
+        .catch((err) => console.log(err));
+    }
     e.preventDefault();
   }
 
@@ -74,10 +99,11 @@ class App extends React.Component {
       .then((data) => {
         console.log(data);
         this.setState({
-          title: data.title,
-          date: data.date,
-          category: data.category,
-          amount: data.amount,
+          title: data.payload.title,
+          date: data.payload.date,
+          category: data.payload.category,
+          amount: data.payload.amount,
+          _id: data.payload._id,
         });
       });
   }
