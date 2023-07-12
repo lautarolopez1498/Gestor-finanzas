@@ -39,6 +39,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const registo = await registroModel.findById(id);
+    res.json({
+      message: "Ok",
+      payload: registo,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error: ${error}`,
+      payload: "Error al mostrar registro",
+    });
+  }
+});
+
 router.get("/generales", async (req, res) => {
   try {
     const generales = await registroModel.find({ category: "Generales" });

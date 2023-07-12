@@ -68,6 +68,20 @@ class App extends React.Component {
     }
   }
 
+  editExpense(id) {
+    fetch(`/api/registros/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          title: data.title,
+          date: data.date,
+          category: data.category,
+          amount: data.amount,
+        });
+      });
+  }
+
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({
@@ -157,7 +171,7 @@ class App extends React.Component {
                         <td>
                           <button
                             className="btn cyan darken-4"
-                            onClick={this.editExpense}
+                            onClick={() => this.editExpense(expense._id)}
                           >
                             <i className="material-icons">edit</i>
                           </button>
