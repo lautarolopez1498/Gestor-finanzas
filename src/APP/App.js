@@ -125,7 +125,8 @@ class App extends React.Component {
             </a>
           </div>
         </nav>
-
+        <br></br>
+        <br></br>
         <div className="container">
           <div className="row">
             <div className="col s5">
@@ -175,6 +176,9 @@ class App extends React.Component {
                   </form>
                 </div>
               </div>
+            </div>
+            <div className="col s7">
+              <h3>Dashboard</h3>
             </div>
             <div className="col s7">
               <table>
