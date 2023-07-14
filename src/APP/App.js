@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import React from "react";
 
 class App extends React.Component {
@@ -127,6 +128,7 @@ class App extends React.Component {
         </nav>
         <br></br>
         <br></br>
+
         <div className="container">
           <div className="row">
             <div className="col s5">
@@ -177,44 +179,112 @@ class App extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="col s7">
+            <div className="col s7 " tyle={{ margin: "20px" }}>
               <h3>Dashboard</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Categoría</th>
+                    <th>Importe</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Gastos generales</td>
+                    <td>$100</td>
+                  </tr>
+                  <tr>
+                    <td>Gastos personales</td>
+                    <td>$200</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div className="col s7">
+          </div>
+        </div>
+        <div className="container">
+          <div className="row">
+            <div className="col s4" style={{ margin: "60px" }}>
+              <h4>Gastos generales</h4>
               <table>
                 <thead>
                   <tr>
                     <th>Gasto</th>
                     <th>Fecha</th>
-                    <th>Categoria</th>
+                    {/* <th>Categoria</th> */}
                     <th>Importe</th>
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.expenses.map((expense) => {
-                    return (
-                      <tr key={expense._id}>
-                        <td>{expense.title}</td>
-                        <td>{expense.date}</td>
-                        <td>{expense.category}</td>
-                        <td>{expense.amount}</td>
-                        <td>
-                          <button
-                            className="btn cyan darken-4"
-                            onClick={() => this.editExpense(expense._id)}
-                          >
-                            <i className="material-icons">edit</i>
-                          </button>
-                          <button
-                            className="btn red darken-1"
-                            style={{ margin: "4px" }}
-                            onClick={() => this.deleteExpense(expense._id)}
-                          >
-                            <i className="material-icons">delete</i>
-                          </button>
-                        </td>
-                      </tr>
-                    );
+                    if (expense.category == "Generales") {
+                      return (
+                        <tr key={expense._id}>
+                          <td>{expense.title}</td>
+                          <td>{expense.date.slice(0, 10)}</td>
+                          {/* <td>{expense.category}</td> */}
+                          <td>{expense.amount}</td>
+                          <td>
+                            <button
+                              className="btn cyan darken-4"
+                              onClick={() => this.editExpense(expense._id)}
+                            >
+                              <i className="material-icons">edit</i>
+                            </button>
+                            <button
+                              className="btn red darken-1"
+                              style={{ margin: "4px" }}
+                              onClick={() => this.deleteExpense(expense._id)}
+                            >
+                              <i className="material-icons">delete</i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="col s4" style={{ margin: "60px" }}>
+              <h4>Gastos personales</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Gasto</th>
+                    <th>Fecha</th>
+                    {/* <th>Categoria</th> */}
+                    <th>Importe</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.expenses.map((expense) => {
+                    if (expense.category == "Personales") {
+                      return (
+                        <tr key={expense._id}>
+                          <td>{expense.title}</td>
+                          <td>{expense.date.slice(0, 10)}</td>
+                          {/* <td>{expense.category}</td> */}
+                          <td>{expense.amount}</td>
+                          <td>
+                            <button
+                              className="btn-small cyan darken-4"
+                              onClick={() => this.editExpense(expense._id)}
+                            >
+                              <i className="material-icons">edit</i>
+                            </button>
+                            <button
+                              className="btn-small red darken-1"
+                              style={{ margin: "4px" }}
+                              onClick={() => this.deleteExpense(expense._id)}
+                            >
+                              <i className="material-icons">delete</i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    }
                   })}
                 </tbody>
               </table>
