@@ -8,7 +8,6 @@ router.post("/", async (req, res) => {
     const nuevoRegistro = await registroModel.create({
       date: req.body.date,
       title: req.body.title,
-      category: req.body.category,
       amount: req.body.amount,
     });
 
@@ -55,51 +54,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/generales", async (req, res) => {
-  try {
-    const generales = await registroModel.find({ category: "Generales" });
-    res.json({
-      message: "Ok",
-      payload: generales,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error: ${error}`,
-      payload: 'Error al mostrar los "Gastos Generales',
-    });
-  }
-});
-
-router.get("/personales", async (req, res) => {
-  try {
-    const personales = await registroModel.find({ category: "Personales" });
-    res.json({
-      message: "Ok",
-      payload: personales,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error: ${error}`,
-      payload: 'Error al mostrar los "Gastos Personales',
-    });
-  }
-});
-
-router.get("/ahorros", async (req, res) => {
-  try {
-    const ahorros = await registroModel.find({ category: "Ahorros" });
-    res.json({
-      message: "Ok",
-      payload: ahorros,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error: ${error}`,
-      payload: 'Error al mostrar los "Ahorros',
-    });
-  }
-});
-
 router.delete("/:id", async (req, res) => {
   try {
     const registoID = req.params.id;
@@ -122,7 +76,6 @@ router.patch("/:id", async (req, res) => {
     const registroActualizado = await registroModel.findByIdAndUpdate(id, {
       date: req.body.date,
       title: req.body.title,
-      category: req.body.category,
       amount: req.body.amount,
     });
     res.json({
