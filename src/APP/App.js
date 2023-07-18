@@ -112,6 +112,20 @@ class App extends React.Component {
     });
   }
 
+  acumulador() {
+    let acumulador = 0;
+    this.state.expenses.forEach((expense) => {
+      acumulador += expense.amount;
+    });
+
+    let acum = parseFloat(acumulador).toLocaleString("es-AR", {
+      style: "currency",
+      currency: "ARS",
+    });
+
+    return acum;
+  }
+
   render() {
     return (
       <div>
@@ -124,7 +138,6 @@ class App extends React.Component {
         </nav>
         <br></br>
         <br></br>
-
         <div className="container">
           <div className="row">
             <div className="col s5">
@@ -170,14 +183,10 @@ class App extends React.Component {
               <h3>Indicadores</h3>
               <table>
                 <tbody>
-                  {this.state.expenses.map((expenses) => {
-                    return (
-                      <tr>
-                        <td>Gastos de tarjeta mensual</td>
-                        <td>${}</td>
-                      </tr>
-                    );
-                  })}
+                  <tr>
+                    <td>Gasto mensual acumulado</td>
+                    <td>{this.acumulador()}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
